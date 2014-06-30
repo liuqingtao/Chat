@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.io.IOException;
+import java.net.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -6,12 +8,13 @@ import java.awt.event.WindowEvent;
 
 
 public class ChatClient extends Frame{
-
+	
 	TextField tf = new TextField();
 	TextArea ta = new TextArea();
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new ChatClient().launchFrame();
+		
 	}
 	
 	public void launchFrame(){
@@ -32,6 +35,16 @@ public class ChatClient extends Frame{
 			
 		});
 		setVisible(true);
+		connect();
+	}
+	
+	public void connect(){
+		try{
+			Socket s = new Socket("127.0.0.1",3385);
+System.out.println("connect");
+		}catch(Exception e){
+			System.out.println("error"+e);
+		}
 	}
 	
 	private class tfActionListener implements ActionListener{

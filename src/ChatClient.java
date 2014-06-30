@@ -1,8 +1,5 @@
 import java.awt.*;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +11,6 @@ public class ChatClient extends Frame{
 	
 	TextField tf = new TextField();
 	TextArea ta = new TextArea();
-	Socket s;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new ChatClient().launchFrame();
@@ -44,8 +40,8 @@ public class ChatClient extends Frame{
 	
 	public void connect(){
 		try{
-			 s = new Socket("127.0.0.1",3385);
-//System.out.println("connect");
+			Socket s = new Socket("127.0.0.1",3385);
+System.out.println("connect");
 		}catch(Exception e){
 			System.out.println("error"+e);
 		}
@@ -56,17 +52,8 @@ public class ChatClient extends Frame{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			ta.setText(tf.getText().trim());
-			
-			try {
-				DataOutputStream out = new DataOutputStream(s.getOutputStream());
-				out.writeUTF(tf.getText().trim());
-				out.flush();
-				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 			tf.setText("");
-		} 
+		}
 		
 	}
 

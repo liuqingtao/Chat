@@ -1,4 +1,3 @@
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.*;
 public class ChatServer {
@@ -8,12 +7,8 @@ public class ChatServer {
 			ServerSocket ss = new ServerSocket(3385);
 			while(true){
 				Socket s = ss.accept();
-				DataInputStream in = new DataInputStream(s.getInputStream());
-				String str = in.readUTF();
-				System.out.println(str);
-				in.close();
+//System.out.println("a client accept");
 			}
-				
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

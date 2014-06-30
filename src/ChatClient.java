@@ -20,6 +20,14 @@ public class ChatClient extends Frame{
 		tf.setBackground(Color.WHITE);
 		ta.setBackground(Color.WHITE);
 		pack();
+		addWindowListener(new WindowAdapter(){
+
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				System.exit(0);
+			}
+			
+		});
 		setVisible(true);
 	}
 

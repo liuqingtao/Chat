@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -15,6 +17,7 @@ public class ChatClient extends Frame{
 	public void launchFrame(){
 		setLocation(400, 300);
 		setSize(300,400);
+		tf.addActionListener(new tfActionListener());
 		add(tf,BorderLayout.SOUTH);
 		add(ta,BorderLayout.NORTH);
 		tf.setBackground(Color.WHITE);
@@ -23,12 +26,22 @@ public class ChatClient extends Frame{
 		addWindowListener(new WindowAdapter(){
 
 			@Override
-			public void windowClosing(WindowEvent arg0) {
+			public void windowClosing(WindowEvent e) {
 				System.exit(0);
 			}
 			
 		});
 		setVisible(true);
+	}
+	
+	private class tfActionListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			ta.setText(tf.getText().trim());
+			tf.setText("");
+		}
+		
 	}
 
 }

@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.net.*;
 public class ChatServer {
 
+	
+	boolean bsCoonect = false;
+	ServerSocket ss = null;
+	Socket s = null;
 	public static void main(String[] args) {
-		boolean bCoonect;
-		boolean bsCoonect = false;
-		ServerSocket ss = null;
-		Socket s = null;
-		DataInputStream in =null;
-		try {
+		new ChatServer().start();
+	}
+
+	public void start(){
+try {
 			
 			ss= new ServerSocket(3385);
 		}catch(BindException e){
@@ -23,32 +26,66 @@ public class ChatServer {
 		try{
 			bsCoonect =true;
 			while(bsCoonect){
-				 bCoonect=false;
 				 s= ss.accept();
-				 in= new DataInputStream(s.getInputStream());
-				bCoonect =true;
-				while(bCoonect){
-				String str = in.readUTF();
-				System.out.println(str);
-				}
-				//in.close();
+				 Client client = new Client(s);
+				 new Thread(client).start();
+					
+			//in.close();
 			}
 				
-		}catch(EOFException e){
-			
-			System.out.println("Cleint is closed");
-		}
-		catch (IOException e) {
+		}catch(IOException e) {
 			e.printStackTrace();
 		}finally{
 			try {
-				if(in != null) in.close();
-				if(s!=null) s.close();
+				ss.close();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 		}
+		
 	}
-
+	private class Client implements Runnable{
+		Socket s;
+		DataInputStream in;
+		private boolean bconnected =false;
+		Client(Socket s){
+			this.s = s;
+			try {
+				in = new DataInputStream(s.getInputStream());
+				bconnected =true;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+		try {
+			while(bconnected){
+				String str;
+					str = in.readUTF();
+					System.out.println(str);
+				}
+			}catch(EOFException e){
+				
+				System.out.println("Cleint is closed");
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}finally{
+				try {
+					if(in != null) in.close();
+					if(s!=null) s.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+			}
+				
+				
+		}
+		
+	}
 }

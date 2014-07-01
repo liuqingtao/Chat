@@ -15,6 +15,7 @@ public class ChatClient extends Frame{
 	TextField tf = new TextField();
 	TextArea ta = new TextArea();
 	Socket s;
+	DataOutputStream out =null;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new ChatClient().launchFrame();
@@ -34,6 +35,7 @@ public class ChatClient extends Frame{
 
 			@Override
 			public void windowClosing(WindowEvent e) {
+				diconnect();
 				System.exit(0);
 			}
 			
@@ -45,12 +47,22 @@ public class ChatClient extends Frame{
 	public void connect(){
 		try{
 			 s = new Socket("127.0.0.1",3385);
+			 out =new DataOutputStream(s.getOutputStream());
 //System.out.println("connect");
 		}catch(Exception e){
 			System.out.println("error"+e);
 		}
 	}
 	
+	public void diconnect(){
+		try {
+			out.close();
+			s.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	private class tfActionListener implements ActionListener{
 
 		@Override
@@ -58,11 +70,10 @@ public class ChatClient extends Frame{
 			ta.setText(tf.getText().trim());
 			
 			try {
-				DataOutputStream out = new DataOutputStream(s.getOutputStream());
+				out= new DataOutputStream(s.getOutputStream());
 				out.writeUTF(tf.getText().trim());
 				out.flush();
-				out.close();
-			} catch (IOException e) {
+				} catch (IOException e) {
 				e.printStackTrace();
 			}
 			tf.setText("");

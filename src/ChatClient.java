@@ -1,8 +1,5 @@
 import java.awt.*;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +13,8 @@ public class ChatClient extends Frame{
 	TextArea ta = new TextArea();
 	Socket s;
 	DataOutputStream out =null;
+	DataInputStream in = null;
+	boolean bConnected =false;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new ChatClient().launchFrame();
@@ -42,21 +41,26 @@ public class ChatClient extends Frame{
 		});
 		setVisible(true);
 		connect();
+		new Thread(new PrvThread()).start();
 	}
 	
 	public void connect(){
 		try{
 			 s = new Socket("127.0.0.1",3385);
 			 out =new DataOutputStream(s.getOutputStream());
+			 in = new DataInputStream(s.getInputStream());
+			 bConnected = true;
 //System.out.println("connect");
 		}catch(Exception e){
 			System.out.println("error"+e);
 		}
 	}
 	
+
 	public void diconnect(){
 		try {
 			out.close();
+			bConnected =false;
 			s.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -80,7 +84,22 @@ public class ChatClient extends Frame{
 		} 
 		
 	}
+	
+	class PrvThread implements Runnable {
 
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			try{
+				while(bConnected){
+					String str = in.readUTF();
+					ta.setText(ta.getText() + str +"\n");
+				}
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+		}
+		
+	}
 }
-
 

@@ -95,6 +95,8 @@ public class ChatClient extends Frame{
 					String str = in.readUTF();
 					ta.setText(ta.getText() + str +"\n");
 				}
+			}catch(SocketException e){
+				System.out.println("Quit");
 			}catch(IOException e){
 				e.printStackTrace();
 			}

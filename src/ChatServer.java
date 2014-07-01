@@ -5,7 +5,7 @@ public class ChatServer {
 
 	boolean bsCoonect = false;
 	ServerSocket ss = null;
-
+	 Client client = null;
 	List<Client> clients = new ArrayList<Client>();
 	public static void main(String[] args) {
 		new ChatServer().start();
@@ -26,7 +26,7 @@ try {
 			bsCoonect =true;
 			while(bsCoonect){
 				 Socket s= ss.accept();
-				 Client client = new Client(s);
+				 client = new Client(s);
 				 clients.add(client);
 				 new Thread(client).start();
 					
@@ -63,7 +63,7 @@ try {
 			}
 		}
 		
-		public void send(String str){
+		public void send(String str) throws SocketException{
 			try {
 				out.writeUTF(str);
 			} catch (IOException e) {
@@ -95,6 +95,7 @@ try {
 				try {
 					if(in != null) in.close();
 					if(s!=null) s.close();
+					clients.remove(this);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

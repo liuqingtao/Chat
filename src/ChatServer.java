@@ -1,4 +1,5 @@
 import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.*;
 public class ChatServer {
@@ -12,6 +13,10 @@ public class ChatServer {
 		try {
 			
 			ss= new ServerSocket(3385);
+		}catch(BindException e){
+			System.out.println("The port is using");
+			System.out.println("Please close correlation procedure and return the server ");
+			System.exit(0);
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -29,8 +34,12 @@ public class ChatServer {
 				//in.close();
 			}
 				
-		} catch (IOException e) {
+		}catch(EOFException e){
+			
 			System.out.println("Cleint is closed");
+		}
+		catch (IOException e) {
+			e.printStackTrace();
 		}finally{
 			try {
 				if(in != null) in.close();

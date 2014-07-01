@@ -6,24 +6,39 @@ public class ChatServer {
 	public static void main(String[] args) {
 		boolean bCoonect;
 		boolean bsCoonect = false;
+		ServerSocket ss = null;
+		Socket s = null;
+		DataInputStream in =null;
 		try {
 			
-			ServerSocket ss = new ServerSocket(3385);
+			ss= new ServerSocket(3385);
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		try{
 			bsCoonect =true;
 			while(bsCoonect){
 				 bCoonect=false;
-				Socket s = ss.accept();
-				DataInputStream in = new DataInputStream(s.getInputStream());
+				 s= ss.accept();
+				 in= new DataInputStream(s.getInputStream());
 				bCoonect =true;
 				while(bCoonect){
 				String str = in.readUTF();
 				System.out.println(str);
 				}
-				in.close();
+				//in.close();
 			}
 				
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Cleint is closed");
+		}finally{
+			try {
+				if(in != null) in.close();
+				if(s!=null) s.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 

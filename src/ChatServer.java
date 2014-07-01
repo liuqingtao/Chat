@@ -1,13 +1,12 @@
-import java.io.DataInputStream;
-import java.io.EOFException;
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
+import java.util.*;
 public class ChatServer {
 
-	
 	boolean bsCoonect = false;
 	ServerSocket ss = null;
-	Socket s = null;
+
+	List<Client> clients = new ArrayList<Client>();
 	public static void main(String[] args) {
 		new ChatServer().start();
 	}
@@ -26,8 +25,9 @@ try {
 		try{
 			bsCoonect =true;
 			while(bsCoonect){
-				 s= ss.accept();
+				 Socket s= ss.accept();
 				 Client client = new Client(s);
+				 clients.add(client);
 				 new Thread(client).start();
 					
 			//in.close();
@@ -48,17 +48,30 @@ try {
 	private class Client implements Runnable{
 		Socket s;
 		DataInputStream in;
+		DataOutputStream out;
 		private boolean bconnected =false;
+		
 		Client(Socket s){
 			this.s = s;
 			try {
 				in = new DataInputStream(s.getInputStream());
-				bconnected =true;
+				out = new DataOutputStream(s.getOutputStream());
+				bconnected = true;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		
+		public void send(String str){
+			try {
+				out.writeUTF(str);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
@@ -66,7 +79,11 @@ try {
 			while(bconnected){
 				String str;
 					str = in.readUTF();
-					System.out.println(str);
+//System.out.println(str);
+					for(int i =0;i<clients.size();i++){
+						Client c = clients.get(i);
+						c.send(str);
+					}
 				}
 			}catch(EOFException e){
 				

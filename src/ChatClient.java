@@ -71,7 +71,7 @@ public class ChatClient extends Frame{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			ta.setText(tf.getText().trim());
+			//ta.setText(tf.getText().trim());
 			
 			try {
 				out= new DataOutputStream(s.getOutputStream());
@@ -93,7 +93,7 @@ public class ChatClient extends Frame{
 			try{
 				while(bConnected){
 					String str = in.readUTF();
-					ta.setText(ta.getText() + str +"\n");
+					ta.setText(ta.getText() + "\n" + str );
 				}
 			}catch(SocketException e){
 				System.out.println("Quit");

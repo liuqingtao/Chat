@@ -68,7 +68,8 @@ try {
 				out.writeUTF(str);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				clients.remove(this);
+				System.out.println("对方退出了，我从List中删除了");
 			}
 		}
 		
@@ -95,7 +96,7 @@ try {
 				try {
 					if(in != null) in.close();
 					if(s!=null) s.close();
-					clients.remove(this);
+					
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
